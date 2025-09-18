@@ -11,12 +11,21 @@ class Graph:
         self.init()
 
     def init(self):
+        self.colors = []
+        for v in range(21):
+            if v < 7:
+                self.colors.append("skyblue")
+            elif v < 14:
+                self.colors.append("orange")
+            else:
+                self.colors.append("darkblue")
+
         self.x = np.arange(21)
         self.values = np.zeros(21)
 
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot()
-        self.bars = self.ax.bar(self.x, self.values, color="skyblue", edgecolor="black")
+        self.bars = self.ax.bar(self.x, self.values, color=self.colors, edgecolor="black")
 
         self.ax.set_ylim(-2500, 10000)
         self.ax.set_xlabel("Index")
