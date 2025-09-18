@@ -13,10 +13,10 @@ byte csPins[NUM_SENSORS] = {
 uint32_t clockFrequency = 1000000; //1MHz
 
 typedef struct __attribute__((packed)) {
-  uint8_t  stx;        // 0xA5
-  uint32_t t_us;       // micros()
-  uint8_t  count;      // 21
-  int16_t vals[21];   // 실제 데이터
+    uint8_t  stx;        // 0xA5
+    uint32_t t_us;       // micros()
+    uint8_t  count;      // 21
+    int16_t vals[21];   // 실제 데이터
 } Packet;
 
 Packet packet;
