@@ -1,20 +1,12 @@
 #include <SPI.h>
-#include "SparkFunBMP384.h" // SparkFun 라이브러리를 사용합니다.
+#include "src/SparkFun_BMP384_Arduino_Library/src/SparkFunBMP384.h"
 
 // 사용할 센서의 개수
 #define NUM_SENSORS 21
 
 // 회로도에 따른 Chip Select (CS) 핀 번호 배열
-// CSB1~CSB7 -> D2, D3, D4, D5, D6, D7, D8
 byte csPins[NUM_SENSORS] = {22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42};
-//byte csPins[NUM_SENSORS] = {22,23,24,25,26,27,28};
-//byte csPins[NUM_SENSORS] = {29,30,31,32,33,34,35};
-//byte csPins[NUM_SENSORS] = {36,37,38,39,40,41,42};
-//byte csPins[NUM_SENSORS] = {17,18,19,20,21,22,23};
-//byte csPins[21] = {0,1,2,3,4,5,6,7,8,9,10,14,15,16,17,18,19,20,21,22,23};
-//byte csPins[NUM_SENSORS] = {29};
 uint32_t clockFrequency = 1000000;
-// SPISettings settingA(1000000, MSBFIRST,SPI_MODE2);
 
 // 각 센서에 대한 BMP384 객체를 배열로 생성
 BMP384 pressureSensors[NUM_SENSORS];
@@ -31,9 +23,7 @@ void setup()
         digitalWrite(i, HIGH); 
     }
 
-  
     delay(10);
-
     
     // SPI 라이브러리 초기화
     SPI.begin();
@@ -52,12 +42,10 @@ void setup()
             Serial.print("Error: BMP384 not connected, check wiring on CS pin ");
             Serial.println(csPins[i]);
            // while (1); // 에러 발생 시 프로그램 정지
-           delay(1);
+            delay(1);
         }
         Serial.println("Done.");
-        
     }
-
     Serial.println("\nAll sensors initialized successfully!");
 
 }

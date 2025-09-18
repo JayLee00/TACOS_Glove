@@ -1,5 +1,12 @@
 # 2025_Tactile_Sensor
 
+## 라이브러리 경로 세팅
+- .ino 폴더가 있는 곳에 src 폴더를 만들고 그 안에 라이브러리 두면 인식 됨
+```c
+// ex
+#include "src/SparkFun_BMP384_Arduino_Library/src/SparkFunBMP384.h"
+```
+
 ## PC Receiver Result Example
 > Serial port COM8 opened successfully.
 > STX=0xa5, t_us=1199434288, count=21, vals=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 32]
