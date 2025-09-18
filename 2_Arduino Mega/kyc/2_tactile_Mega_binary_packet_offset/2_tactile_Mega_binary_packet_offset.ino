@@ -84,7 +84,7 @@ void loop()
         bmp3_data data;
         // 센서에서 데이터 읽기 수행
         int8_t err = pressureSensors[i].getSensorData(&data);
-        delay(1);
+        // delay(1);
         // 데이터 수집 성공 여부 확인
         if (err == BMP3_OK)
         {
