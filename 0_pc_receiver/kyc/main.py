@@ -6,11 +6,12 @@ from visualizer.matplot import Graph
 
 if __name__ == "__main__":
     t = Tactile()
-    g = Graph()
+    g = Graph(t)
     g.data_list = t.get_sensor_data()
     g.show()
     while True:
-        g.data_list = t.get_sensor_data()
+        pass
+        # g.data_list = t.get_sensor_data()
         
         # print(sen)
 
