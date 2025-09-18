@@ -6,8 +6,8 @@ import time
 
 class Tactile_Serial:
     # Packet 포맷: < = little endian
-    # B = uint8_t, I = uint32_t, B = uint8_t, 21H = 21 * uint16_t
-    packet_format = "<BIB21H"
+    # B = uint8_t, I = uint32_t, B = uint8_t, 21h = 21 * int16_t
+    packet_format = "<BIB21h"
     packet_size = struct.calcsize(packet_format)
 
     def __init__(self, port='COM5', baudrate=115200, timeout=8):
@@ -82,6 +82,6 @@ class Tactile_Serial:
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    t_ser = Tactile_Serial(port='COM8')
+    t_ser = Tactile_Serial(port='COM10')
     t_ser.open()
     t_ser.read()
