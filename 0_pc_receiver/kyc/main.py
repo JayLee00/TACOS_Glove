@@ -1,8 +1,7 @@
-
 import os, sys
 sys.path.append(os.getcwd())
 from Tactile.tactile import Tactile
-from visualizer.matplot import Graph
+from Visualizer.matplot import Graph
 
 if __name__ == "__main__":
     t = Tactile()
