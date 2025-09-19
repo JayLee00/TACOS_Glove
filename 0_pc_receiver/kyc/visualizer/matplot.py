@@ -3,12 +3,16 @@ import numpy as np
 from matplotlib.animation import FuncAnimation
 import threading
 
+from Tactile.tactile import Tactile
+
 class Graph:
-    def __init__(self, tact):
+    def __init__(self, tact, auto_start = True):
         self.tact = tact
         self.data_list = [[10]*21]
 
         self.init()
+        if auto_start:
+            self.show()
 
     def init(self):
         self.colors = []

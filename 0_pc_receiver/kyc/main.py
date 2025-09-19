@@ -4,13 +4,8 @@ from Tactile.tactile import Tactile
 from Visualizer.matplot import Graph
 
 if __name__ == "__main__":
-    t = Tactile()
-    g = Graph(t)
-    g.data_list = t.get_sensor_data()
-    g.show()
+    t = Tactile(port='COM10')
+    g = Graph(t, auto_start = True)
     while True:
         pass
-        # g.data_list = t.get_sensor_data()
-        
-        # print(sen)
 
