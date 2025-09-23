@@ -16,7 +16,7 @@ class Tactile_Serial:
         self.port     = port
         self.baudrate = baudrate
         self.timeout  = timeout
-        
+
         self.ser = None
 
         self._stop_event = threading.Event()
@@ -113,6 +113,7 @@ class Tactile_Serial:
                     self.vals = vals.copy()
                     self.timestamp.append(time.time())
                     print(f"STX={hex(stx)}, t_us={t_us}, count={count}, vals={vals}")
+                    self._buf.clear()
 
         except (serial.SerialException, SerialTimeoutException) as e:
             print(f"Serial port error: {e}")

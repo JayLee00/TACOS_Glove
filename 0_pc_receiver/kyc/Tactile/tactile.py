@@ -4,8 +4,8 @@ sys.path.append(os.getcwd())
 from Tactile.Serial.tactile_serial import Tactile_Serial
 
 class Tactile:
-    def __init__(self, port='COM10'):
-        self.t_ser = Tactile_Serial(port=port)
+    def __init__(self, port='COM10', baudrate=1_000_000):
+        self.t_ser = Tactile_Serial(port=port, baudrate=baudrate)
         self.t_ser.open()
 
         self.start_read()
