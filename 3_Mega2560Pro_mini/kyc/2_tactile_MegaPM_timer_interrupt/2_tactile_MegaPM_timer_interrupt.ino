@@ -1,13 +1,13 @@
 #include <SPI.h>
 #include "src/SparkFun_BMP384_Arduino_Library/src/SparkFunBMP384.h"
 
-/***************Timer Setting***************/
+/*************** Timer Setting ***************/
 #define SERIAL_BAUD 1000000UL      // 1 Mbps (16 MHz에서 오차 0%)
 #define OCR2A_VALUE 173            // 16MHz / (1024*(1+173)) ≈ 89.799 Hz
 // Timer2 prescaler = 1024  → CS22=1, CS21=1, CS20=1
 #define TIMER2_PRESC_BITS ((1<<CS22)|(1<<CS21)|(1<<CS20))
 
-
+/*************** Sensors ***************/
 // 사용할 센서의 개수
 #define NUM_SENSORS 21
 
@@ -19,6 +19,11 @@ byte csPins[NUM_SENSORS] = {
     };
 uint32_t clockFrequency = 1000000; //1MHz
 
+// 각 센서에 대한 BMP384 객체를 배열로 생성
+BMP384 pressureSensors[NUM_SENSORS];
+double offset[NUM_SENSORS] = {0};
+
+/*************** Packet ***************/
 typedef struct __attribute__((packed)) {
     uint8_t  stx;        // 0xA5
     uint32_t t_us;       // micros()
@@ -27,11 +32,6 @@ typedef struct __attribute__((packed)) {
 } Packet;
 
 Packet packet;
-
-// 각 센서에 대한 BMP384 객체를 배열로 생성
-BMP384 pressureSensors[NUM_SENSORS];
-
-double offset[NUM_SENSORS] = {0};
 
 /*************** Timer ***************/
 volatile bool tick_90hz = false;
@@ -57,6 +57,9 @@ void timer2_start_ctc_90hz() {
   sei();
 }
 
+/*************************************/
+/*************** setup ***************/
+/*************************************/
 void setup()
 {
     packet.stx = 0xA5;
@@ -65,7 +68,7 @@ void setup()
     // 시리얼 통신 시작
     Serial.begin(SERIAL_BAUD);
     while (!Serial) { /* optional */ }
-    Serial.println("BMP384 Multi-Sensor Test (SparkFun Library)");
+    // Serial.println("BMP384 Multi-Sensor");
 
     for (int i=0; i <NUM_SENSORS; i++)
     {
@@ -75,7 +78,6 @@ void setup()
     delay(10);
     // SPI 라이브러리 초기화
     SPI.begin();
-        bmp3_data data;
 
     // 각 센서를 순서대로 초기화
     for (int i = 0; i < NUM_SENSORS; i++)
@@ -116,10 +118,14 @@ void setup()
     
     timer2_start_ctc_90hz();
 }
+
 uint64_t sum = 0;
 uint32_t count = 0;
 unsigned int avr = 0;
 
+/*************************************/
+/*************** loop ****************/
+/*************************************/
 void loop()
 {
     // 7개의 센서에서 순차적으로 데이터 읽기
