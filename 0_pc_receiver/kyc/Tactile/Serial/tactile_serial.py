@@ -74,7 +74,7 @@ class Tactile_Serial:
                         if count == 21:
                             self.vals = vals.copy()
                             self.timestamp.append(time_tmp)
-                            # print(f"STX={hex(stx)}, t_us={t_us}, count={count}, vals={vals}")
+                            print(f"STX={hex(stx)}, t_us={t_us}, count={count}, vals={vals}")
                 # data = None
 
         except serial.SerialException as e:
