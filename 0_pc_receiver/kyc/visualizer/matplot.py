@@ -6,7 +6,7 @@ import threading
 from Tactile.tactile import Tactile
 
 class Graph:
-    def __init__(self, tact, auto_start = True):
+    def __init__(self, tact: Tactile, auto_start = True):
         self.tact = tact
         self.data_list = [[10]*21]
 
@@ -38,9 +38,9 @@ class Graph:
     def show(self):
         self.ani = FuncAnimation(
             self.fig,
-            self.update,           # update(frame) 시그니처 유지
-            interval=5,          # 100 ms
-            blit=False,             # 가능하면 성능 향상
+            self.update,            # update(frame) 시그니처 유지
+            interval=5,             # ms
+            blit=True,             # 가능하면 성능 향상
             cache_frame_data=False, # 경고 제거: 프레임 캐시 끄기
             repeat=True
         )
