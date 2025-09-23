@@ -76,7 +76,7 @@ void setup()
             {
                 delay(1);
             }
-                delay(100);
+            delay(100);
             i--;
             continue;
         }
