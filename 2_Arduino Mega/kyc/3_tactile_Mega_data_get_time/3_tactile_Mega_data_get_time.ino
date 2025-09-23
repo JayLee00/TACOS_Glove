@@ -73,9 +73,21 @@ void setup()
         }
         else
         {
-            offset[i] = 0;
+            // offset[i] = 0;
+            while (pressureSensors[i].beginSPI(csPins[i],clockFrequency) != BMP3_OK)
+            {
+                delay(1);
+            }
+            i--;
+            continue;
         }
     }
+    for (int i = 0; i < NUM_SENSORS; i++)
+    {
+        Serial.print(offset[i]);
+        Serial.print("\t");
+    }
+    // while(1);
 }
 
 void loop()
@@ -103,7 +115,7 @@ void loop()
         }
         else
         {
-            packet.vals[i] = 0;
+            packet.vals[i] = -1;
         }
     }
     af_tim = micros() - bf_tim;
