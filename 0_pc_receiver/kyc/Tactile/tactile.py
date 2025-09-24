@@ -16,10 +16,10 @@ class Tactile:
     def print_sensor_data(self, timestamp_en = False):
         if timestamp_en:
             print(self.t_ser.timestamp)
-        print(self.t_ser.vals)
+        print(self.t_ser.pres)
 
     def get_sensor_data(self) -> list:
-        return self.t_ser.vals
+        return self.t_ser.pres
 
 if __name__ == "__main__":
     t = Tactile()

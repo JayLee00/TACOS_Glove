@@ -5,18 +5,20 @@ import struct
 import time
 import threading
 
+import numpy as np
+
 class Tactile_Serial:
     # Packet 포맷: < = little endian
-    # B=stx(1) I=t_us(4) B=size(1) 21h=vals(42) B=etx(1)  -> 총 49바이트
-    packet_format = "<BIB21hB"
-    packet_size   = struct.calcsize(packet_format)  # 49
+    packet_format = "<HHB21h21hH"   # stx(2) cnt(2) size(1) pres(42) temp(42) etx(2)
+    packet_size   = struct.calcsize(packet_format)  # 91
+    
+    STX = 0xFFAA
+    ETX = 0xAAFF
+    EXPECTED_SIZE = packet_size  # 91
 
-    STX = 0xA5
-    ETX = 0x5A
     NUM_SENSORS = 21
-    EXPECTED_SIZE = packet_size  # 아두이노에서 size=전체길이라면 49
 
-    def __init__(self, port='COM5', baudrate=1_000_000, timeout=0.1):
+    def __init__(self, port='COM12', baudrate=1_000_000, timeout=0.1):
         self.port     = port
         self.baudrate = baudrate
         self.timeout  = timeout
@@ -26,7 +28,8 @@ class Tactile_Serial:
         self._stop_event = threading.Event()
         self._buf = bytearray()
 
-        self.vals = []
+        self.pres = []
+        self.temp = []
         self.timestamp = []
 
         self.prev_time = time.time()
@@ -62,8 +65,9 @@ class Tactile_Serial:
         성공 시 (stx, t_us, size, vals_list, etx)를 반환하고, 버퍼에서 제거.
         실패/부족 시 None 반환 (버퍼는 부족한 데이터 유지/또는 헤더 1바이트만 소비).
         """
-        # 1) 헤더 찾기
-        idx = self._buf.find(bytes([self.STX]))
+        # 1) 2바이트 헤더 시그니처 찾기 (리틀엔디안: 0xFFAA -> b"\xAA\xFF")
+        hdr = self.STX.to_bytes(2, "little")
+        idx = self._buf.find(hdr)
         if idx == -1:
             # 헤더가 없으면 오래된 쓰레기만 정리
             if len(self._buf) > 2 * self.packet_size:
@@ -83,15 +87,16 @@ class Tactile_Serial:
 
         # 5) 언팩 시도
         try:
-            stx, t_us, size, *rest = struct.unpack(self.packet_format, pkt)
+            stx, cnt, size, *rest = struct.unpack(self.packet_format, pkt)
         except struct.error:
             # 정렬 실패/깨짐 → 헤더 한 바이트만 버리고 재시도
             self._consume(1)
             return None
 
-        # rest = 21h + B(etx)
-        vals = rest[:-1]
-        etx  = rest[-1]
+        # rest = 21h(pres) + 21h(temp) + H(etx)
+        pres = rest[:21]
+        temp = rest[21:42]
+        etx  = rest[42]
 
         # 6) 필드 검증
         if stx != self.STX:
@@ -104,7 +109,7 @@ class Tactile_Serial:
             self._consume(1)
             return None
 
-        if len(vals) != self.NUM_SENSORS:
+        if len(pres) != self.NUM_SENSORS or len(temp) != self.NUM_SENSORS:
             # 값 개수 불일치 → 한 바이트만 밀기
             self._consume(1)
             return None
@@ -115,9 +120,9 @@ class Tactile_Serial:
             return None
 
         # 7) 성공 → 버퍼에서 해당 패킷 길이만 소비하고 리턴
-        # self._consume(self.packet_size)
-        self._buf.clear()
-        return stx, t_us, size, vals, etx
+        self._consume(self.packet_size)
+        # self._buf.clear()
+        return stx, cnt, size, pres, temp, etx
 
     def read_loop(self):
         try:
@@ -134,20 +139,23 @@ class Tactile_Serial:
                     parsed = self._try_parse_one()
                     if parsed is None:
                         break
-                    stx, t_us, size, vals, etx = parsed
+                    stx, cnt, size, pres, temp, etx = parsed
 
                     # 데이터 처리
-                    self.vals = list(vals)  # int16 리스트
+                    self.pres = list(pres) # 압력(int16, hPa)
+                    temp = np.array(temp, dtype=np.float64)
+                    tmp = temp / 100.0
+                    self.temp = list(tmp) # 온도(int16)
                     self.timestamp.append(time_tmp)
 
-                    print(f"STX={hex(stx)}, t_us={t_us}, size={size}, ETX={hex(etx)}, vals={self.vals}")
+                    print(f"STX={hex(stx)}, cnt={cnt}, size={size}, ETX={hex(etx)}, pres={self.pres}, temp={self.temp}", end=" ")
 
                     now_time = time.time()
                     delay_time = now_time - self.prev_time
                     self.prev_time = now_time
                     if delay_time <= 0:
                         delay_time = 1e-9
-                    print(f"{1.0/delay_time:.3f} Hz")
+                    print(f"{1.0/delay_time:.3f} Hz", end="\n")
 
         except (serial.SerialException, SerialTimeoutException) as e:
             print(f"Serial port error: {e}")
