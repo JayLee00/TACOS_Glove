@@ -31,7 +31,8 @@ class Graph:
         self.ax = self.fig.add_subplot()
         self.bars = self.ax.bar(self.x, self.values, color=self.colors, edgecolor="black")
 
-        self.ax.set_ylim(-2500, 10000)
+        self.ax.set_ylim(0, 2500)
+        # self.ax.set_ylim(-2500, 10000)
         self.ax.set_xlabel("Index")
         self.ax.set_ylabel("Value")
 
