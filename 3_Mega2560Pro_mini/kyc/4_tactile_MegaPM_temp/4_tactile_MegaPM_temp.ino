@@ -121,7 +121,7 @@ void setup()
     
     timer2_start_ctc_90hz();
 }
-
+// double max = 0;
 uint64_t sum = 0;
 uint32_t count = 0;
 unsigned int avr = 0;
@@ -144,7 +144,13 @@ void loop()
         if (err == BMP3_OK)
         {
             packet.pres[i] = (int16_t)((data.pressure - offset[i]) / 10.0);
+            // packet.pres[i] = (int16_t)((data.pressure * 100.0);
             packet.temp[i] = (int16_t)(data.temperature * 100.0);
+            // if(i==0){
+            //     if (data.pressure>max)
+            //         max = data.pressure;
+            //     Serial.println(max);
+            // }
         }
         else
         {
