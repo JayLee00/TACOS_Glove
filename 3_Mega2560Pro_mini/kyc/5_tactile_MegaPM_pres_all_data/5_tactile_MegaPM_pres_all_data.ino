@@ -67,6 +67,7 @@ void setup()
     packet.stx = 0xFFAA;
     packet.etx = 0xAAFF;
     packet.cnt = 0;
+    tick_90hz = false;
 
     // 시리얼 통신 시작
     Serial.begin(SERIAL_BAUD);
