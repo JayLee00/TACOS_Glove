@@ -44,6 +44,8 @@ class Tactile_Serial:
         self.prev_cnt = 0
         self.miss_cnt = 0
 
+        self.save_enable = False
+
         self._stop_event = threading.Event()
 
 
@@ -145,7 +147,7 @@ class Tactile_Serial:
                 # 가용 데이터 읽기 (없으면 1바이트라도 읽어 timeout에 맡김)
                 n = self.ser.in_waiting
                 chunk = self.ser.read(n if n > 0 else 1)
-                time_tmp = time.time()
+                time_tmp = time.perf_counter()
                 if chunk:
                     self._buf.extend(chunk)
 

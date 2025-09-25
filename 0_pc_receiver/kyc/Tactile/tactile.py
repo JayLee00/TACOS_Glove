@@ -25,8 +25,8 @@ class Tactile:
             print(self.t_ser.timestamp)
         print(self.t_ser.pres)
 
-    def get_sensor_data(self) -> list:
-        return self.t_ser.pres
+    def get_all_data(self) -> list:
+        return self.t_ser.pres, self.t_ser.temp, self.t_ser.cnt, self.t_ser.data_hz, self.t_ser.miss_cnt
     
     def print_all_data(self):
             while not self._stop_event.is_set():
@@ -41,7 +41,7 @@ class Tactile:
                 s_temp = np.array2string(
                     temp_np, max_line_width=1_000_000, separator=' ', precision=2, floatmode='maxprec_equal'
                 )
-
+                
                 print(f"\r{self.t_ser.cnt:5d}: pres={s_pres}, temp={s_temp}\t{self.t_ser.data_hz:.3f} Hz\tmiss={self.t_ser.miss_cnt}")#, end='', flush=True)
                     # self.prev_cnt = self.t_ser.cnt
             # s1 = np.array2string(self.t_ser.pres, max_line_width=100000, threshold=np.inf, separator=' ')

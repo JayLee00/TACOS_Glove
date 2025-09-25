@@ -8,7 +8,12 @@ from Tactile.tactile import Tactile
 class Graph:
     def __init__(self, tact: Tactile, auto_start = True):
         self.tact = tact
-        self.data_list = [[10]*21]
+
+        self.data_pres = [[0]*21]
+        self.data_temp = [[0]*21]
+        self.data_cnt = 0
+        self.data_hz = 0
+        self.data_miss_cnt = 0
 
         self.init()
         if auto_start:
@@ -31,10 +36,10 @@ class Graph:
         self.ax = self.fig.add_subplot()
         self.bars = self.ax.bar(self.x, self.values, color=self.colors, edgecolor="black")
 
-        self.ax.set_ylim(0, 2500)
-        # self.ax.set_ylim(-2500, 10000)
+        self.ax.set_ylim(0, 2500) # self.ax.set_ylim(-2500, 10000)
         self.ax.set_xlabel("Index")
         self.ax.set_ylabel("Value")
+
 
     def show(self):
         self.ani = FuncAnimation(
@@ -48,12 +53,17 @@ class Graph:
         plt.show()
 
     def update(self, frame):
-        self.data_list = self.tact.get_sensor_data()
+        self.data_pres, self.data_temp, self.data_cnt, self.data_hz, self.data_miss_cnt = self.tact.get_all_data()
 
-        new_values = np.array(self.data_list, dtype=int)  # 센서값 대신 랜덤
+        new_values = np.array(self.data_pres, dtype=int)  # 센서값 대신 랜덤
         for bar, val in zip(self.bars, new_values):
             bar.set_height(val)
         return self.bars
+
+if __name__ == "__main__":
+    g = Graph()
+    g.show()
+
     # def start_show(self): #show Thread 함수 시작
     #     self.thread = threading.Thread(target=self.show)#, daemon=True)
     #     self.thread.start()
@@ -61,13 +71,6 @@ class Graph:
     # def __del__(self):
     #     if getattr(self, "thread", None) is not None:
     #         self.thread.join(timeout=0.1)
-
-if __name__ == "__main__":
-    g = Graph()
-    g.show()
-
-
-
 
 '''
 from threading import Thread
