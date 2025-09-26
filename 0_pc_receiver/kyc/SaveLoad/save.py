@@ -21,8 +21,11 @@ class Save:
         self.tactile_temp_rts = None
 
         self.START_TIME = time.time()
+        lt = time.localtime(self.START_TIME)
+        self.lt = time.strftime("%y%m%d_%H%M%S",lt)
 
-        self.fn = ""
+        self.filename = ""
+        self.filename_lstsq = ""
 
     def start(self):
         self.tactile.t_ser.save_enable = True
@@ -69,10 +72,8 @@ class Save:
     def save(self, filename = "timestamp_data"):#묵시적
         self.get_all_poses()
 
-        lt = time.localtime(self.START_TIME)
-        lt = time.strftime("%y%m%d_%H%M%S",lt)
-        path = f"{os.getcwd()}/0_pc_receiver/kyc/SAVEFILES/{filename}_{lt}_t{self.tactile_time.shape}P{self.tactile_pres.shape}T{self.tactile_temp.shape}K{self.kalman_en}.npz"
-        self.fn = f"{filename}_{lt}_t{self.tactile_time.shape}P{self.tactile_pres.shape}T{self.tactile_temp.shape}K{self.kalman_en}"
+        path = f"{os.getcwd()}/0_pc_receiver/kyc/SAVEFILES/{filename}_{self.lt}_t{self.tactile_time.shape}P{self.tactile_pres.shape}T{self.tactile_temp.shape}K{self.kalman_en}.npz"
+        self.filename = f"{filename}_{self.lt}_t{self.tactile_time.shape}P{self.tactile_pres.shape}T{self.tactile_temp.shape}K{self.kalman_en}"
         if self.kalman_en == True:
             np.savez(f"{path}", 
                         tactile_time=self.tactile_time, 
@@ -104,7 +105,23 @@ class Save:
                     self.tactile_temp.shape
                 )
             
-        return self.fn
+        return self.filename
+    
+    def save_lstsq(self, a, b, file_explain = "least_square_data"):
+        filename = "least_square_data"
+        self.filename_lstsq = f"{filename}_{self.lt}_from({file_explain})"
+        path = f"{os.getcwd()}/0_pc_receiver/kyc/SAVEFILES/{self.filename_lstsq}.npz"
+        
+        np.savez(f"{path}", 
+                    ls_a=a, 
+                    ls_b=b
+                )
+        print(f"Saved: {path}:", 
+                a.shape, 
+                b.shape
+            )
+            
+        return self.filename_lstsq
         
     def __del__(self):
         pass

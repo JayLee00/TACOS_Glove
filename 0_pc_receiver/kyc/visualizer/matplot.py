@@ -36,7 +36,7 @@ class Graph:
         self.ax = self.fig.add_subplot()
         self.bars = self.ax.bar(self.x, self.values, color=self.colors, edgecolor="black")
 
-        self.ax.set_ylim(0, 2500) # self.ax.set_ylim(-2500, 10000)
+        self.ax.set_ylim(-500, 1500)#self.ax.set_ylim(0, 2500) # self.ax.set_ylim(-2500, 10000)
         self.ax.set_xlabel("Index")
         self.ax.set_ylabel("Value")
 
@@ -53,7 +53,8 @@ class Graph:
         plt.show()
 
     def update(self, frame):
-        self.data_pres, self.data_temp, self.data_cnt, self.data_hz, self.data_miss_cnt = self.tact.get_all_data()
+        # self.data_pres, self.data_temp, self.data_cnt, self.data_hz, self.data_miss_cnt = self.tact.get_all_data()
+        self.data_pres, self.data_temp, self.data_cnt, self.data_hz, self.data_miss_cnt = self.tact.get_calibrated_data()
 
         new_values = np.array(self.data_pres, dtype=int)  # 센서값 대신 랜덤
         for bar, val in zip(self.bars, new_values):

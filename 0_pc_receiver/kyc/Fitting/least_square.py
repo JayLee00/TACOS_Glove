@@ -4,12 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from SaveLoad.load import Load
 
-def load_npz(path):
-    """np.savez로 저장한 RTS 보정 데이터를 로드."""
-    data = np.load(path, allow_pickle=False)
-    temp = np.asarray(data["tactile_temp_rts"])  # (T, N)
-    pres = np.asarray(data["tactile_pres_rts"])  # (T, N)
-    return temp, pres
+# def load_npz(path):
+#     """np.savez로 저장한 RTS 보정 데이터를 로드."""
+#     data = np.load(path, allow_pickle=False)
+#     temp = np.asarray(data["tactile_temp_rts"])  # (T, N)
+#     pres = np.asarray(data["tactile_pres_rts"])  # (T, N)
+#     return temp, pres
 
 def fit_line_lstsq(x, y):
     """
@@ -111,14 +111,14 @@ def plot_grid(temp, pres, slopes, biases, layout=(3,7), dot_size=8):
                 y = pres[:, k]
                 m = np.isfinite(x) & np.isfinite(y)
                 x = x[m]; y = y[m]
-                ax.scatter(x, y, s=dot_size, alpha=0.5)
+                ax.scatter(x, y, s=dot_size, alpha=0.5, color='orange')
 
                 a = slopes[k]; b = biases[k]
                 if np.isfinite(a) and np.isfinite(b) and x.size > 0:
                     xx = np.linspace(np.min(x), np.max(x), 100)
                     yy = a * xx + b
-                    ax.plot(xx, yy, linewidth=1.5)
-                ax.set_title(f"Ch {k}")
+                    ax.plot(xx, yy, linewidth=2.5, color='black')
+                ax.set_title(f"Sensor {k+1}")
                 ax.set_xlabel("Temp")
                 ax.set_ylabel("Pres")
                 ax.grid(True, linestyle="--", alpha=0.4)
@@ -130,20 +130,20 @@ def plot_grid(temp, pres, slopes, biases, layout=(3,7), dot_size=8):
     plt.tight_layout()
     plt.show()
 
-def results_to_csv(results, out_csv="ls_results.csv"):
-    """
-    결과 테이블을 CSV로 저장 (sensor_idx, slope_a, intercept_b, R2, n).
-    """
-    header = "sensor_idx,slope_a,intercept_b,R2,n"
-    arr = np.column_stack([
-        results["sensor_idx"],
-        results["slope_a"],
-        results["intercept_b"],
-        results["R2"],
-        results["n"],
-    ])
-    np.savetxt(out_csv, arr, delimiter=",", header=header, comments="", fmt=["%d","%.8g","%.8g","%.6f","%d"])
-    return out_csv
+# def results_to_csv(results, out_csv="ls_results.csv"):
+#     """
+#     결과 테이블을 CSV로 저장 (sensor_idx, slope_a, intercept_b, R2, n).
+#     """
+#     header = "sensor_idx,slope_a,intercept_b,R2,n"
+#     arr = np.column_stack([
+#         results["sensor_idx"],
+#         results["slope_a"],
+#         results["intercept_b"],
+#         results["R2"],
+#         results["n"],
+#     ])
+#     np.savetxt(out_csv, arr, delimiter=",", header=header, comments="", fmt=["%d","%.8g","%.8g","%.6f","%d"])
+#     return out_csv
 
 # ===================== 사용 예시 =====================
 if __name__ == "__main__":

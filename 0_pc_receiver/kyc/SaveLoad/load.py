@@ -7,8 +7,12 @@ sys.path.append(os.getcwd())
 # from Visualizer.pres_temp import plot_pres_temp_grid
 
 class Load:
-    def __init__(self, filename):
-        self.path = f"{os.getcwd()}/0_pc_receiver/kyc/SAVEFILES/{filename}.npz"
+    def __init__(self, filename, is_coefficients = False):
+        if is_coefficients == False:
+            self.path = f"{os.getcwd()}/0_pc_receiver/kyc/SAVEFILES/{filename}.npz"
+        else:
+            self.path = f"{os.getcwd()}/0_pc_receiver/kyc/OFFSET_TABLE/{filename}.npz"
+
         self.data = None
         self.load()
 
@@ -18,8 +22,6 @@ class Load:
     def print_data(self, part = "actions"):
         data = self.data[part]
         print(data, data.shape, flush=True)
-
-
 
 # def plot_pres_temp_grid(time, pres, temp, layout=(3, 7), title="21 Sensors: pres & temp vs time"):
 #     """

@@ -6,9 +6,12 @@ sys.path.append(os.getcwd())
 from Tactile.Serial.tactile_serial import Tactile_Serial
 
 class Tactile:
-    def __init__(self, port='COM10', baudrate=1_000_000, print_en=False):
+    def __init__(self, port='COM10', baudrate=1_000_000, print_en=False, calib_data=None):
         self.t_ser = Tactile_Serial(port=port, baudrate=baudrate)
         self.prev_cnt = 0
+        self.calib_data = calib_data
+
+        self.calibrated_pres = None
         
         self._stop_event = threading.Event()
 
@@ -27,6 +30,13 @@ class Tactile:
 
     def get_all_data(self) -> list:
         return self.t_ser.pres, self.t_ser.temp, self.t_ser.cnt, self.t_ser.data_hz, self.t_ser.miss_cnt
+    
+    def get_calibrated_data(self) -> list:
+        if self.calib_data is not None and len(self.t_ser.pres) != 0:
+            self.calibrated_pres = self.t_ser.pres - (self.calib_data["ls_a"] * self.t_ser.temp + self.calib_data["ls_b"])
+            return self.calibrated_pres, self.t_ser.temp, self.t_ser.cnt, self.t_ser.data_hz, self.t_ser.miss_cnt
+        else:
+            return self.t_ser.pres, self.t_ser.temp, self.t_ser.cnt, self.t_ser.data_hz, self.t_ser.miss_cnt
     
     def print_all_data(self):
             while not self._stop_event.is_set():
