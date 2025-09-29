@@ -29,13 +29,13 @@ if __name__ == "__main__":
 
     # 간단히 화면에 확인
     for j in range(pres.shape[1]):
-        print(f"Ch{j+1:02d}  a={slopes[j]:.6g}  b={biases[j]:.6g}  \tR2={r2s[j]:.4f}  n={counts[j]}")
+        print(f"Ch{j+1:02d}  a={slopes[j]:.4f}  b={biases[j]:9.3f}  R2={r2s[j]:.4f}  n={counts[j]}")
 
     # browser = SensorBrowser(time, pres, temp, layout=(3, 7), title="21 Sensors")
     # browser.show(mode="scatter", ms=0.5, alpha=0.3)
     
-    # 오버레이 보기(빠른 트렌드)
-    plot_overlay_all(temp, pres, slopes, biases, sample_every=3, dot_size=5)
+    # 1번 창: 오버레이 보기(빠른 트렌드)
+    plot_overlay_all(temp, pres, slopes, biases, sample_every=3, dot_size=0.5)
 
-    # 3x7 그리드(21채널) 상세 보기
-    plot_grid(temp, pres, slopes, biases, layout=(3,7), dot_size=0.1)
+    # 2번 창: 3x7 그리드(21채널) 상세 보기
+    plot_grid(temp, pres, slopes, biases, layout=(3,7), dot_size=0.01)
