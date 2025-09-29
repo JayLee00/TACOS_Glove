@@ -86,8 +86,8 @@ def plot_overlay_all(temp, pres, slopes, biases, sample_every=1, dot_size=6):
             yy = a * xx + b
             plt.plot(xx, yy, linewidth=1)
 
-    plt.xlabel("Temp (x)")
-    plt.ylabel("Pres (y)")
+    plt.xlabel("temperature [ºC]")
+    plt.ylabel("pressure [hPa]")
     plt.title("Temp vs Pres (All sensors overlay)")
     plt.grid(True)
     plt.tight_layout()
@@ -119,8 +119,8 @@ def plot_grid(temp, pres, slopes, biases, layout=(3,7), dot_size=8):
                     yy = a * xx + b
                     ax.plot(xx, yy, linewidth=2.5, color='black')
                 ax.set_title(f"Sensor {k+1}")
-                ax.set_xlabel("Temp")
-                ax.set_ylabel("Pres")
+                ax.set_xlabel("temperature [ºC]")
+                ax.set_ylabel("pressure [hPa]")
                 ax.grid(True, linestyle="--", alpha=0.4)
             else:
                 ax.axis("off")
