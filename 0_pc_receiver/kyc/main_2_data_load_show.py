@@ -6,7 +6,8 @@ from SaveLoad.save import Save
 from SaveLoad.load import Load
 from Visualizer.matplot import Graph
 from Visualizer.pres_temp import SensorBrowser
-from Fitting.least_square import fit_all_sensors, plot_overlay_all, plot_grid
+from Visualizer.least_square import lstsq_plot_overlay_all, lstsq_plot_grid
+from Fitting.least_square import lstsq_fit_all_sensors
 
 # np.set_printoptions(linewidth=100000, threshold=np.inf)
 if __name__ == "__main__":

@@ -6,7 +6,8 @@ from SaveLoad.save import Save
 from SaveLoad.load import Load
 from Visualizer.matplot import Graph
 from Visualizer.pres_temp import SensorBrowser
-from Fitting.least_square import fit_all_sensors, plot_overlay_all, plot_grid
+from Visualizer.least_square import lstsq_plot_overlay_all, lstsq_plot_grid
+from Fitting.least_square import lstsq_fit_all_sensors
 
 # np.set_printoptions(linewidth=100000, threshold=np.inf)
 if __name__ == "__main__":
@@ -22,7 +23,7 @@ if __name__ == "__main__":
     pres = l.data["tactile_pres_kf"]
     temp = l.data["tactile_temp_kf"]
 
-    results, slopes, biases, r2s, counts = fit_all_sensors(temp, pres)
+    results, slopes, biases, r2s, counts = lstsq_fit_all_sensors(temp, pres)
     
     ## s_lstsq = Save(tactile=None)
     ## s_lstsq.save_lstsq(slopes, biases, fn)
@@ -35,7 +36,7 @@ if __name__ == "__main__":
     # browser.show(mode="scatter", ms=0.5, alpha=0.3)
     
     # 1번 창: 오버레이 보기(빠른 트렌드)
-    plot_overlay_all(temp, pres, slopes, biases, sample_every=3, dot_size=0.5)
+    lstsq_plot_overlay_all(temp, pres, slopes, biases, sample_every=3, dot_size=0.5)
 
     # 2번 창: 3x7 그리드(21채널) 상세 보기
-    plot_grid(temp, pres, slopes, biases, layout=(3,7), dot_size=0.01)
+    lstsq_plot_grid(temp, pres, slopes, biases, layout=(3,7), dot_size=0.01)
