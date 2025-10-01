@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
-import threading
+# import threading
 
 from Tactile.tactile import Tactile
 
