@@ -19,12 +19,8 @@ if __name__ == "__main__":
 
     l = LoadTactile(fn)
     time = l.data["tactile_time"]
-    # pres = l.data["tactile_pres"]
-    # temp = l.data["tactile_temp"]
     pres = l.data["tactile_pres"]
     temp = l.data["tactile_temp"]
-    # pres = l.data["tactile_pres_rts"]
-    # temp = l.data["tactile_temp_rts"]
 
     # plot_pres_temp_grid(time, pres, temp)
     browser = SensorBrowser(time, pres, temp, layout=(3, 7), title="21 Sensors")
