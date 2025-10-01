@@ -6,7 +6,7 @@ sys.path.append(os.getcwd())
 
 # from Visualizer.pres_temp import plot_pres_temp_grid
 
-class Load:
+class LoadTactile:
     def __init__(self, filename, is_coefficients = False):
         if is_coefficients == False:
             self.path = f"{os.getcwd()}/0_pc_receiver/kyc/SAVEFILES/{filename}.npz"
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     # test_handside = HandSide.BOTH
     # test = MoCAP_Manager(handsides=test_handside, use_trackers=True)
     # l = Load("timestamp_data_250829_154232")
-    l = Load("timestamp_data_250925_094512_t(413,)P(413, 21)T(413, 21)")
+    l = LoadTactile("timestamp_data_250925_094512_t(413,)P(413, 21)T(413, 21)")
 
     # l.print_data("tactile_time")
     # print("")

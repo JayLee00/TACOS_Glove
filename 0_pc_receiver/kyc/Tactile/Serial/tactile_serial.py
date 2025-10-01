@@ -7,7 +7,7 @@ import threading
 
 import numpy as np
 
-class Tactile_Serial:
+class TactileSerial:
     # Packet 포맷: < = little endian
     packet_format = "<HHB21I21hH"    # stx(2) cnt(2) size(1) pres(21×uint32) temp(21×int16) etx(2)
     packet_size   = struct.calcsize(packet_format)  # 133
@@ -18,10 +18,11 @@ class Tactile_Serial:
 
     NUM_SENSORS = 21
 
-    def __init__(self, port='COM12', baudrate=1_000_000, timeout=0.1):
+    def __init__(self, port='COM12', baudrate=1_000_000, timeout=0.1, calib_data=None):
         self.port     = port
         self.baudrate = baudrate
         self.timeout  = timeout
+        self.calib_data = calib_data
 
         self.ser = None
 
@@ -32,7 +33,9 @@ class Tactile_Serial:
 
         self.pressures = []
         self.temperatures = []
-        self.timestamp = []
+
+        self.save_time = []
+        self.save_data = []
 
         # self.prev_time = time.time()
         self.data_hz = 0.0
@@ -47,7 +50,6 @@ class Tactile_Serial:
         self.save_enable = False
 
         self._stop_event = threading.Event()
-
 
     def open(self):
         try:
@@ -169,10 +171,17 @@ class Tactile_Serial:
                     self.pres = prs
                     self.temp = tmp
 
-                    self.pressures.append(self.pres)
-                    self.temperatures.append(self.temp)
+                    if self.save_enable:
+                        self.pressures.append(self.pres)
+                        self.temperatures.append(self.temp)
 
-                    self.timestamp.append(time_tmp)
+                        self.save_time.append(time_tmp)
+
+                        if self.calib_data is not None and len(self.pres) != 0:
+                            self.pres_calib = self.pres - (self.calib_data["ls_a"] * self.temp + self.calib_data["ls_b"])
+                            self.save_data.append(self.pres_calib)
+                        else:
+                            self.save_data.append(self.pres)
 
                     expected_cnt = self.prev_cnt + 1
                     if expected_cnt >= 0xFFAA:
@@ -231,7 +240,7 @@ class Tactile_Serial:
             pass
 
 if __name__ == "__main__":
-    t_ser = Tactile_Serial(port='COM12', baudrate=1_000_000, timeout=0.1)
+    t_ser = TactileSerial(port='COM12', baudrate=1_000_000, timeout=0.1)
     t_ser.open()
     t_ser.start_read_loop()
     try:

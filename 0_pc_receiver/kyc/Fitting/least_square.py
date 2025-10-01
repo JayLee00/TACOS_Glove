@@ -2,7 +2,7 @@
 # sys.path.append(os.getcwd())
 import numpy as np
 import matplotlib.pyplot as plt
-from SaveLoad.load import Load
+from SaveLoad.load import LoadTactile
 
 # def load_npz(path):
 #     """np.savez로 저장한 RTS 보정 데이터를 로드."""

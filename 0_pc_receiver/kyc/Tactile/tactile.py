@@ -3,21 +3,26 @@ import threading
 import numpy as np
 import os, sys
 sys.path.append(os.getcwd())
-from Tactile.Serial.tactile_serial import Tactile_Serial
+from Tactile.Serial.tactile_serial import TactileSerial
 
 class Tactile:
     def __init__(self, port='COM10', baudrate=1_000_000, print_en=False, calib_data=None):
-        self.t_ser = Tactile_Serial(port=port, baudrate=baudrate)
-        self.prev_cnt = 0
+        self.t_ser = TactileSerial(port=port, baudrate=baudrate, calib_data=calib_data)
+        self.print_en = print_en
         self.calib_data = calib_data
+
+        self.prev_cnt = 0
 
         self.calibrated_pres = None
         
         self._stop_event = threading.Event()
 
+        self.connect()
+
+    def connect(self):
         self.t_ser.open()
         self.start_read()
-        if print_en == True:
+        if self.print_en == True:
             self.start_print_loop()
 
     def start_read(self):
@@ -25,7 +30,7 @@ class Tactile:
 
     def print_sensor_data(self, timestamp_en = False):
         if timestamp_en:
-            print(self.t_ser.timestamp)
+            print(self.t_ser.save_time)
         print(self.t_ser.pres)
 
     def get_all_data(self) -> list:

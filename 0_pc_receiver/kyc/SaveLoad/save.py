@@ -5,7 +5,7 @@ import numpy as np
 from Tactile.tactile import Tactile
 from Filter.kalman import TactileKalmanBatch
 
-class Save:
+class SaveTactile:
     def __init__(self, tactile:Tactile, kalman_en = True):
         self.tactile = tactile
         self.kalman_en = kalman_en
@@ -27,6 +27,8 @@ class Save:
         self.filename = ""
         self.filename_lstsq = ""
 
+        self.start()
+
     def start(self):
         self.tactile.t_ser.save_enable = True
         self.is_running = True
@@ -39,7 +41,7 @@ class Save:
         if self.is_running == True:
             self.stop()
             
-        self.tactile_time = np.array(self.tactile.t_ser.timestamp,    dtype=np.float64)
+        self.tactile_time = np.array(self.tactile.t_ser.save_time,    dtype=np.float64)
         self.tactile_pres = np.array(self.tactile.t_ser.pressures,    dtype=np.float64)
         self.tactile_temp = np.array(self.tactile.t_ser.temperatures, dtype=np.float64)
 
@@ -72,8 +74,8 @@ class Save:
     def save(self, filename = "timestamp_data"):#묵시적
         self.get_all_poses()
 
-        path = f"{os.getcwd()}/0_pc_receiver/kyc/SAVEFILES/{filename}_{self.lt}_t{self.tactile_time.shape}P{self.tactile_pres.shape}T{self.tactile_temp.shape}K{self.kalman_en}.npz"
         self.filename = f"{filename}_{self.lt}_t{self.tactile_time.shape}P{self.tactile_pres.shape}T{self.tactile_temp.shape}K{self.kalman_en}"
+        path = f"{os.getcwd()}/0_pc_receiver/kyc/SAVEFILES/{self.filename}.npz"
         if self.kalman_en == True:
             np.savez(f"{path}", 
                         tactile_time=self.tactile_time, 
@@ -123,5 +125,51 @@ class Save:
             
         return self.filename_lstsq
         
+    def get_all_poses_calib(self):
+        if self.is_running == True:
+            self.stop()
+        # tactile
+        self.tactile_time     = np.array(self.tactile.t_ser.save_time,    dtype=np.float64)
+        self.tactile_pres_tmp = np.array(self.tactile.t_ser.save_data,    dtype=np.float64)
+        self.tactile_temp_tmp = np.array(self.tactile.t_ser.temperatures, dtype=np.float64)
+        self.tactile_shape =self.tactile_time.shape
+        kf = TactileKalmanBatch(
+            num_sensors=21,
+            # 필요시 시작값 튜닝 가능:
+            q_pres=(2e-4)**2, r_pres=(2e-3)**2,
+            q_temp=(5e-3)**2, r_temp=(5e-2)**2,
+            P0_pres=1.0, P0_temp=1.0
+        )
+        out = kf.fit(
+            ts=  self.tactile_time,
+            pres=self.tactile_pres_tmp,
+            temp=self.tactile_temp_tmp,
+            do_smooth=True,          # RTS 활성화
+            auto_noise=False,        # True로 두면 초반 window로 R/Q 자동추정
+            auto_win_seconds=1.0,
+            hz_hint=90.0,
+            q_from_r_ratio=0.01
+        )
+        self.tactile_pres_calib = kf.results["pres_kf"]
+        self.tactile_temp_kf    = kf.results["temp_kf"]
+        # self.tactile_left_pres.reshape(self.tactile_left_pres[0], 3, 7)
+
+    def save_calib(self, filename_begin = "timestamp_data"):#묵시적
+        self.get_all_poses_calib()
+
+        filename = f"{filename_begin}_{self.lt}_t{self.tactile_time.shape}P{self.tactile_pres_calib.shape}T{self.tactile_temp_kf.shape}"
+        path = f"{os.getcwd()}/0_pc_receiver/kyc/SAVEFILES/{filename}.npz"
+        np.savez(f"{path}", 
+                 tactile_time = self.tactile_time,
+                 tactile_pres = self.tactile_pres_calib,
+                 tactile_temp = self.tactile_temp_kf
+                 )
+        print(f"Saved {path}:",
+                self.tactile_time      .shape, 
+                self.tactile_pres_calib.shape,
+                self.tactile_temp_kf.shape
+              )
+        return filename
+
     def __del__(self):
         pass
