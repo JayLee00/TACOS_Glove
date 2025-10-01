@@ -1,7 +1,7 @@
 import os, sys
 # import numpy as np
 sys.path.append(os.getcwd())
-from Tactile import Tactile, Save, Load, Graph, SensorBrowser, lstsq_plot_overlay_all, lstsq_plot_grid, lstsq_fit_all_sensors
+from Tactile import Tactile, SaveTactile, LoadTactile, Graph, SensorBrowser, lstsq_plot_overlay_all, lstsq_plot_grid, lstsq_fit_all_sensors
 
 # np.set_printoptions(linewidth=100000, threshold=np.inf)
 if __name__ == "__main__":
@@ -31,14 +31,14 @@ if __name__ == "__main__":
     # # fn="timestamp_data_250926_094146_t(66499,)P(66499, 21)T(66499, 21)KTrue"
     # # fn="timestamp_data_250926_132828_t(39828,)P(39828, 21)T(39828, 21)KTrue"
     fn="timestamp_data_250926_144317_t(83977,)P(83977, 21)T(83977, 21)KTrue"
-    l = Load(fn)
+    l = LoadTactile(fn)
     time = l.data["tactile_time"]
     # pres = l.data["tactile_pres"]
     # temp = l.data["tactile_temp"]
     pres = l.data["tactile_pres_kf"]
     temp = l.data["tactile_temp_kf"]
 
-    results, slopes, biases, r2s, counts = fit_all_sensors(temp, pres)
+    results, slopes, biases, r2s, counts = lstsq_fit_all_sensors(temp, pres)
     # s_lstsq = Save(tactile=None)
     # s_lstsq.save_lstsq(slopes, biases, fn)
 
