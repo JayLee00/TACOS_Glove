@@ -150,7 +150,7 @@ void loop()
         if (err == BMP3_OK)
         {
             packet.pres[i] = (uint32_t)(data.pressure * 100.0);// 최대 21,434,092
-            packet.temp[i] = (int16_t)(data.temperature * 100.0);
+            packet.temp[i] = (uint16_t)(data.temperature * 100.0);// 최대 65,535
         }
         else
         {
