@@ -3,7 +3,7 @@ import threading
 import numpy as np
 import os, sys
 sys.path.append(os.getcwd())
-from Tactile.Serial.tactile_serial import TactileSerial
+from Tactile import TactileSerial
 
 class Tactile:
     def __init__(self, port='COM10', baudrate=1_000_000, print_en=False, calib_data=None):
@@ -16,8 +16,6 @@ class Tactile:
         self.calibrated_pres = None
         
         self._stop_event = threading.Event()
-
-        self.connect()
 
     def connect(self):
         self.t_ser.open()

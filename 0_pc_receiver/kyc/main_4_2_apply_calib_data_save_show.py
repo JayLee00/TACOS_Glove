@@ -13,6 +13,7 @@ if __name__ == "__main__":
     calib_data = l_calib.data
     # print(f"{calib_data["ls_a"].shape}, {calib_data["ls_b"].shape}")
     t = Tactile(port='COM15', baudrate=1_000_000, print_en=False, calib_data=calib_data)
+    t.connect()
     s = SaveTactile(tactile=t)
     g = Graph(t, auto_start = True)
     fn = s.save_calib()

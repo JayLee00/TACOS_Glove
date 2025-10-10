@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib.animation import FuncAnimation
 # import threading
 
-from Tactile.tactile import Tactile
+from Tactile import Tactile
 
 class Graph:
     def __init__(self, tact: Tactile, auto_start = True):

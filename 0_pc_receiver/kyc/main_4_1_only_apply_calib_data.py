@@ -14,4 +14,5 @@ if __name__ == "__main__":
     calib_data = l_calib.data
     # print(f"{calib_data["ls_a"].shape}, {calib_data["ls_b"].shape}")
     t = Tactile(port='COM10', baudrate=1_000_000, print_en=True, calib_data=calib_data)
+    t.connect()
     g = Graph(t, auto_start = True)

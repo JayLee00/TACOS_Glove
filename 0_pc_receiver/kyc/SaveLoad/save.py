@@ -2,8 +2,7 @@ import os
 import time
 import numpy as np
 
-from Tactile.tactile import Tactile
-from Filter.kalman import TactileKalmanBatch
+from Tactile import Tactile, TactileKalmanBatch
 
 class SaveTactile:
     def __init__(self, tactile:Tactile, kalman_en = True, start_delay_sec = 0):
