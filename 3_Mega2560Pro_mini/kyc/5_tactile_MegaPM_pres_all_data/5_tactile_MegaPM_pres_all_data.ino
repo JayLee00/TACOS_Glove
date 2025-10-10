@@ -28,8 +28,8 @@ typedef struct __attribute__((packed)) {
     uint16_t stx;        // 0xFFAA
     uint16_t cnt;        // micros() count로 변경
     uint8_t  size;       // 패킷 사이즈
-    uint32_t pres[21];   // 압력 데이터
-    int16_t  temp[21];   // 온도 데이터
+    uint32_t pres[21];   // 압력 데이터 : 220,000.00 * 100 = 22,000,000 = 0x014F_B180 => 32bit
+    uint16_t temp[21];   // 온도 데이터 : 36.50 * 100 = 3650 = 0x0E42 => 16bit
     uint16_t etx;        // 0xAAFF
 } Packet;
 //만약 packed가 없으면 t_us 정렬 때문에 stx 뒤에 패딩이 들어가 sizeof가 원하는 패킷 크기를 초과할 수 있음
@@ -39,7 +39,11 @@ Packet packet;
 volatile bool tick_90hz = false;
 
 ISR(TIMER2_COMPA_vect) {
-    tick_90hz = true;
+    // tick_90hz = true;
+    packet.cnt++;
+    if (packet.cnt == (uint16_t)0xFFAA) //65,450
+        packet.cnt = 0;
+    Serial.write((uint8_t*)&packet, sizeof(packet));
 }
 
 void timer2_start_ctc_90hz() {
@@ -66,8 +70,9 @@ void setup()
 {
     packet.stx = 0xFFAA;
     packet.etx = 0xAAFF;
+    packet.size = sizeof(Packet); //STX/ETX 포함 크기
     packet.cnt = 0;
-    tick_90hz = false;
+    // tick_90hz = false;
 
     // 시리얼 통신 시작
     Serial.begin(SERIAL_BAUD);
@@ -153,13 +158,13 @@ void loop()
             packet.temp[i] = 0;
         }
     }
-    if (packet.cnt < 0xFFAA - (uint16_t)0x0001) //65,450
-        packet.cnt++;
-    else
-        packet.cnt = 0;
-    packet.size = sizeof(Packet); //STX/ETX 포함 크기
-    if (tick_90hz) {
-        tick_90hz = false;
-        Serial.write((uint8_t*)&packet, sizeof(packet));
-    }
+    // if (packet.cnt < 0xFFAA - (uint16_t)0x0001) //65,450
+    //     packet.cnt++;
+    // else
+    //     packet.cnt = 0;
+    // packet.size = sizeof(Packet); //STX/ETX 포함 크기
+    // if (tick_90hz) {
+    //     tick_90hz = false;
+    //     Serial.write((uint8_t*)&packet, sizeof(packet));
+    // }
 }

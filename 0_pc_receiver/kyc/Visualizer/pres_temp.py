@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from math import ceil
-
+START_IDX = 0
+END_IDX = -1
 class SensorBrowser:
     """
     time: (T,) 1D numpy array
@@ -112,8 +113,8 @@ class SensorBrowser:
             if i < self.N:
                 ax_r = ax.twinx()
 
-                hp, = ax.plot(self.time, self.pres[:, i], linewidth=1.0)
-                ht, = ax_r.plot(self.time, self.temp[:, i], linewidth=1.0, linestyle='--', color='orange')
+                hp, = ax.plot(self.time[START_IDX:END_IDX], self.pres[START_IDX:END_IDX, i], linewidth=1.0)
+                ht, = ax_r.plot(self.time[START_IDX:END_IDX], self.temp[START_IDX:END_IDX, i], linewidth=1.0, linestyle='--', color='orange')
 
                 if h_pres_first is None: h_pres_first = hp
                 if h_temp_first is None: h_temp_first = ht
@@ -149,8 +150,8 @@ class SensorBrowser:
         # ax.set_ylim(1200, 2500)
         # ax_r.set_ylim(15, 36)
 
-        hp, = ax.plot(self.time, self.pres[:, sensor_idx], marker='o', markersize=2, linewidth=0.5, label='pres')
-        ht, = ax_r.plot(self.time, self.temp[:, sensor_idx], marker='s', markersize=2, linewidth=0.5, label='temp',
+        hp, = ax.plot(self.time[START_IDX:END_IDX], self.pres[START_IDX:END_IDX, sensor_idx], marker='o', markersize=2, linewidth=0.5, label='pres')
+        ht, = ax_r.plot(self.time[START_IDX:END_IDX], self.temp[START_IDX:END_IDX, sensor_idx], marker='s', markersize=2, linewidth=0.5, label='temp',
                         linestyle='--', color='orange')
 
         ax.set_xlabel("time [s]")
@@ -176,7 +177,7 @@ class SensorBrowser:
         for i in range(rows * cols):
             ax = axes[i]
             if i < self.N:
-                ax.scatter(self.temp[:, i], self.pres[:, i],
+                ax.scatter(self.temp[START_IDX:END_IDX, i], self.pres[START_IDX:END_IDX, i],
                            s=self.scatter_ms**2, alpha=self.scatter_alpha, color='#000000', edgecolors='none')
                 ax.set_title(f"S{i+1}", fontsize=9)
                 ax.grid(True, linestyle='--', alpha=0.3)
@@ -197,7 +198,7 @@ class SensorBrowser:
         t_min, t_max = np.nanmin(self.temp), np.nanmax(self.temp)
         p_min, p_max = np.nanmin(self.pres), np.nanmax(self.pres)
 
-        ax.scatter(self.temp[:, sensor_idx], self.pres[:, sensor_idx],
+        ax.scatter(self.temp[START_IDX:END_IDX, sensor_idx], self.pres[START_IDX:END_IDX, sensor_idx],
                    s=self.scatter_ms**2, alpha=self.scatter_alpha, color="#00FFFF", edgecolors='#000000')
         ax.set_xlabel("temperature [ºC]")
         ax.set_ylabel("pressure [hPa]")

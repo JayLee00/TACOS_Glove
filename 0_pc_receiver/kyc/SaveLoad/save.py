@@ -6,9 +6,10 @@ from Tactile.tactile import Tactile
 from Filter.kalman import TactileKalmanBatch
 
 class SaveTactile:
-    def __init__(self, tactile:Tactile, kalman_en = True):
+    def __init__(self, tactile:Tactile, kalman_en = True, start_delay_sec = 0):
         self.tactile = tactile
         self.kalman_en = kalman_en
+        self.start_delay_sec = start_delay_sec
 
         self.is_running = False
         self.tactile_time = None
@@ -26,8 +27,10 @@ class SaveTactile:
 
         self.filename = ""
         self.filename_lstsq = ""
-
-        self.start()
+        if self.tactile is not None:
+            if self.start_delay_sec != 0:
+                time.sleep(self.start_delay_sec)
+            self.start()
 
     def start(self):
         self.tactile.t_ser.save_enable = True

@@ -5,8 +5,8 @@ from Tactile import Tactile, SaveTactile, LoadTactile, Graph, SensorBrowser, lst
 
 if __name__ == "__main__":
     '''데이터 수집'''
-    t = Tactile(port='COM15', baudrate=1_000_000, print_en=True)
-    s = SaveTactile(tactile=t)
+    t = Tactile(port='COM10', baudrate=1_000_000, print_en=True)
+    s = SaveTactile(tactile=t, start_delay_sec=30)
     g = Graph(t, auto_start = True)
     '''save+노이즈제거'''
     fn = s.save()

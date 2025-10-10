@@ -9,7 +9,7 @@ import numpy as np
 
 class TactileSerial:
     # Packet 포맷: < = little endian
-    packet_format = "<HHB21I21hH"    # stx(2) cnt(2) size(1) pres(21×uint32) temp(21×int16) etx(2)
+    packet_format = "<HHB21I21HH"    # stx(2) cnt(2) size(1) pres(21×uint32) temp(21×int16) etx(2)
     packet_size   = struct.calcsize(packet_format)  # 133
     
     STX = 0xFFAA
@@ -112,7 +112,7 @@ class TactileSerial:
 
         # rest = 21I(pres) + 21h(temp) + H(etx)
         pres = rest[:self.NUM_SENSORS]# 21×uint32
-        temp = rest[self.NUM_SENSORS:2*self.NUM_SENSORS]# 21×int16
+        temp = rest[self.NUM_SENSORS:2*self.NUM_SENSORS]# 21×uint16
         etx  = rest[2*self.NUM_SENSORS]
 
         # 6) 필드 검증

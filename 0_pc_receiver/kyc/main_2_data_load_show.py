@@ -7,13 +7,14 @@ from Tactile import Tactile, SaveTactile, LoadTactile, Graph, SensorBrowser, lst
 if __name__ == "__main__":
     '''데이터 확인'''
     # fn="timestamp_data_250925_160345_t(41962,)P(41962, 21)T(41962, 21)KTrue"
-    fn="timestamp_data_250926_144317_t(83977,)P(83977, 21)T(83977, 21)KTrue"
+    # fn="timestamp_data_250926_144317_t(83977,)P(83977, 21)T(83977, 21)KTrue"
+    fn="timestamp_data_251001_150712_t(47222,)P(47222, 21)T(47222, 21)KTrue"
     l = LoadTactile(fn)
     time = l.data["tactile_time"]
-    # pres = l.data["tactile_pres"]
-    # temp = l.data["tactile_temp"]
-    pres = l.data["tactile_pres_kf"]
-    temp = l.data["tactile_temp_kf"]
+    pres = l.data["tactile_pres"]
+    temp = l.data["tactile_temp"]
+    # pres = l.data["tactile_pres_kf"]
+    # temp = l.data["tactile_temp_kf"]
     # pres = l.data["tactile_pres_rts"]
     # temp = l.data["tactile_temp_rts"]
 
