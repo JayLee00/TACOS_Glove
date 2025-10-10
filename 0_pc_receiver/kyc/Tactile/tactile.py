@@ -3,7 +3,7 @@ import threading
 import numpy as np
 import os, sys
 sys.path.append(os.getcwd())
-from Tactile import TactileSerial
+from Tactile.Serial.tactile_serial import TactileSerial
 
 class Tactile:
     def __init__(self, port='COM10', baudrate=1_000_000, print_en=False, calib_data=None):

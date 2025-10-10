@@ -1,5 +1,5 @@
 from Tactile.tactile import Tactile
-from Tactile.Serial.tactile_serial import TactileSerial
+# from Tactile.Serial.tactile_serial import TactileSerial
 from Filter.kalman import TactileKalmanBatch
 from SaveLoad.save import SaveTactile
 from SaveLoad.load import LoadTactile
