@@ -10,7 +10,20 @@ if __name__ == "__main__":
     # # fn="timestamp_data_250926_094146_t(66499,)P(66499, 21)T(66499, 21)KTrue"
     # # fn="timestamp_data_250926_132828_t(39828,)P(39828, 21)T(39828, 21)KTrue"
     # fn="timestamp_data_250926_144317_t(83977,)P(83977, 21)T(83977, 21)KTrue"
-    fn="timestamp_data_251001_165857_t(42946,)P(42946, 21)T(42946, 21)KTrue"
+    # fn="timestamp_data_251001_165857_t(42946,)P(42946, 21)T(42946, 21)KTrue"
+
+    # fn="timestamp_data_251013_190015_t(24898,)P(24898, 21)T(24898, 21)KTrue_zero"
+    # fn="timestamp_data_251013_191459_t(82320,)P(82320, 21)T(82320, 21)KTrue_1"
+    # fn="timestamp_data_251013_200029_t(66443,)P(66443, 21)T(66443, 21)KTrue_2"
+    # fn="timestamp_data_251014_110536_t(8984,)P(8984, 21)T(8984, 21)KTrue_3_1"
+    # fn="timestamp_data_251014_105855_t(10297,)P(10297, 21)T(10297, 21)KTrue_3_2"
+    # fn="timestamp_data_251014_110908_t(5932,)P(5932, 21)T(5932, 21)KTrue_3_3"
+    # fn="timestamp_data_251014_103939_t(37563,)P(37563, 21)T(37563, 21)KTrue_4"
+    # fn="timestamp_data_251014_100325_t(29368,)P(29368, 21)T(29368, 21)KTrue_5"
+    # fn="timestamp_data_251013_202420_t(66348,)P(66348, 21)T(66348, 21)KTrue_6"
+    # fn="timestamp_data_251014_101615_t(33228,)P(33228, 21)T(33228, 21)KTrue_7"
+
+    fn="timestamp_data_251013_200029_t(66443,)P(66443, 21)T(66443, 21)KTrue_2"
     l = LoadTactile(fn)
     time = l.data["tactile_time"]
     # pres = l.data["tactile_pres"]
