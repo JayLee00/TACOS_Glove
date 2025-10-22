@@ -18,7 +18,9 @@ if __name__ == "__main__":
     # fn="timestamp_data_251015_104544_t(19195,)P(19195, 21)T(19195, 21)KTrue"
     # fn="timestamp_data_251015_105547_t(17924,)P(17924, 21)T(17924, 21)KTrue"
     # fn="timestamp_data_251015_111016_t(36838,)P(36838, 21)T(36838, 21)KTrue"
-    fn="timestamp_data_251015_112214_t(33221,)P(33221, 21)T(33221, 21)KTrue"
+    # fn="timestamp_data_251015_112214_t(33221,)P(33221, 21)T(33221, 21)KTrue"
+    fn="timestamp_data_251015_105547_t(17924,)P(17924, 21)T(17924, 21)KTrue_5-6o"
+    fn="timestamp_data_251015_112214_t(33221,)P(33221, 21)T(33221, 21)KTrue_6-6o"
     l = LoadTactile(fn)
     time = l.data["tactile_time"]
     # pres = l.data["tactile_pres"]

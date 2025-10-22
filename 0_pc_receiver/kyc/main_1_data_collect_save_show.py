@@ -5,12 +5,13 @@ from Tactile import Tactile, SaveTactile, LoadTactile, Graph, SensorBrowser, lst
 
 if __name__ == "__main__":
     '''데이터 수집'''
-    t = Tactile(port='COM10', baudrate=1_000_000, print_en=True)
+    t = Tactile(port='COM15', baudrate=1_000_000, print_en=True)
     t.connect()
     s = SaveTactile(tactile=t, start_delay_sec=5)
     g = Graph(t, auto_start = True)
     '''save+노이즈제거'''
     fn = s.save()
+    t.disconnect()
     '''데이터 확인'''
     # fn="timestamp_data_250925_160345_t(41962,)P(41962, 21)T(41962, 21)KTrue"
     # fn="timestamp_data_250926_144317_t(83977,)P(83977, 21)T(83977, 21)KTrue"
