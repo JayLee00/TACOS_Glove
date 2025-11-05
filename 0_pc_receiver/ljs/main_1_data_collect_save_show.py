@@ -23,7 +23,7 @@ if __name__ == "__main__":
     # port: 센서가 연결된 COM 포트 번호 (장치 관리자에서 확인 가능)
     # baudrate: 통신 속도 (보통 1,000,000 bps 사용)
     # print_en=True: 콘솔 창에 수신되는 데이터를 실시간으로 출력
-    t = Tactile(port='COM6', baudrate=1_000_000, print_en=True)
+    t = Tactile(port='COM9', baudrate=1_000_000, print_en=True)
 
     # SaveTactile 클래스를 이용해 데이터 저장 객체를 생성합니다.
     # 위에서 만든 tactile 객체(t)를 전달하여 어떤 데이터를 저장할지 알려줍니다.

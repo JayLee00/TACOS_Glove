@@ -12,5 +12,5 @@ if __name__ == "__main__":
 
     calib_data = l_calib.data
     # print(f"{calib_data["ls_a"].shape}, {calib_data["ls_b"].shape}")
-    t = Tactile(port='COM6', baudrate=1_000_000, print_en=True, calib_data=calib_data) # TODO: 실제 COM 포트 번호로 변경하세요.
+    t = Tactile(port='COM9', baudrate=1_000_000, print_en=True, calib_data=calib_data) # TODO: 실제 COM 포트 번호로 변경하세요.
     g = Graph(t, auto_start = True)
