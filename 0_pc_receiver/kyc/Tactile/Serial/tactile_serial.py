@@ -61,16 +61,17 @@ class TactileSerial:
                 bytesize=serial.EIGHTBITS,
                 timeout=self.timeout  # non-blocking with timeout
             )
-        except SerialException as e:
-            sys.stderr.write(f"[ERROR] Failed to open '{self.port}': {e}\n"); sys.stderr.flush()
-            sys.exit(3)
         except (PermissionError, OSError) as e:
-            sys.stderr.write(f"[ERROR] Cannot access '{self.port}' (permission/in-use): {e}\n"); sys.stderr.flush()
+            sys.stderr.write(f"\033[31m[TactileSerial, ERROR] Cannot access \033[1m'{self.port}'\033[22m (permission/in-use): {e}\033[0m\n"); sys.stderr.flush()
             sys.exit(4)
+        except SerialException as e:
+            sys.stderr.write(f"\033[31m[TactileSerial, ERROR] Failed to open \033[1m'{self.port}'\033[22m: {e}\033[0m\n"); sys.stderr.flush()
+            sys.exit(3)
         else:
             if not self.ser.is_open:
                 self.ser.open()
-            print(f"Serial port {self.ser.port} opened successfully.")
+            print(f"\033[32m[TactileSerial] Serial port {self.ser.port} opened successfully.\033[0m")
+
 
     def _consume(self, n: int):
         """버퍼에서 정확히 n바이트만 소비."""
@@ -211,9 +212,9 @@ class TactileSerial:
                             self._rate_last_ts = now
 
         except (serial.SerialException, SerialTimeoutException) as e:
-            print(f"Serial port error: {e}")
+            print(f"[Tactile] Serial port error: {e}")
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            print(f"[Tactile] An unexpected error occurred: {e}")
 
     def start_read_loop(self):
         if getattr(self, "thread", None) and self.thread.is_alive():

@@ -74,6 +74,16 @@ class Tactile:
         if getattr(self, "thread", None):
             self.thread.join(timeout=1.0)
 
+    def disconnect(self):
+        self.stop_print_loop()
+        try:
+            self.t_ser.close()
+        except Exception:
+            pass
+
+    def __del__(self):
+        self.disconnect()
+
 if __name__ == "__main__":
     t = Tactile()
     while True:
