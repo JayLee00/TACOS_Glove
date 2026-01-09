@@ -18,7 +18,7 @@ from Tactile import Tactile
 # --- 사용자 설정 ---
 SENSOR_PORT = 'COM9'                # 센서 보드가 연결된 COM 포트 (데이터 수신용)
 SENSOR_BAUDRATE = 1_000_000         # 수신용 통신 속도
-SENSOR_INDEX_TO_FORWARD = 5         # 전달할 센서 인덱스 (13번째 센서 = 인덱스 12)
+SENSOR_INDEX_TO_FORWARD = 4        # 전달할 센서 인덱스 (13번째 센서 = 인덱스 12)
 
 # --- MATLAB으로 데이터 전달을 위한 설정 ---
 FORWARD_PORT = 'COM12'              # MATLAB이 읽을 가상 시리얼 포트
