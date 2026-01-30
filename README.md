@@ -1,5 +1,3 @@
-# TACOS_Glove repo
-
 # 2025_Tactile_Sensor
 
 ## 라이브러리 경로 세팅
