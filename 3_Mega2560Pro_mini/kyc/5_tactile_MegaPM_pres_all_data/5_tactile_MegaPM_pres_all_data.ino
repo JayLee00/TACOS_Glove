@@ -13,9 +13,9 @@
 
 // 회로도에 따른 Chip Select (CS) 핀 번호 배열
 byte csPins[NUM_SENSORS] = {
-    22, 23, 24, 25, 26, 27, 28,
-    29, 30, 31, 32, 33, 34, 35,
-    36, 37, 38, 39, 40, 41, 42
+    8, 9, 10, 11, 12, 13, 14,
+    15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28
     };
 uint32_t clockFrequency = 1000000; //1MHz
 
@@ -131,40 +131,3 @@ void setup()
 uint64_t sum = 0;
 uint32_t count = 0;
 unsigned int avr = 0;
-
-/*************************************/
-/*************** loop ****************/
-/*************************************/
-void loop()
-{
-    // 7개의 센서에서 순차적으로 데이터 읽기
-    // packet.t_us = micros();
-    for (int i = 0; i < NUM_SENSORS; i++)
-    {
-        // 센서 데이터를 저장할 구조체 생성
-        bmp3_data data;
-        // 센서에서 데이터 읽기 수행
-        int8_t err = pressureSensors[i].getSensorData(&data);
-        // delay(1);
-        // 데이터 수집 성공 여부 확인
-        if (err == BMP3_OK)
-        {
-            packet.pres[i] = (uint32_t)(data.pressure * 100.0);// 최대 21,434,092
-            packet.temp[i] = (uint16_t)(data.temperature * 100.0);// 최대 65,535
-        }
-        else
-        {
-            packet.pres[i] = 0;
-            packet.temp[i] = 0;
-        }
-    }
-    // if (packet.cnt < 0xFFAA - (uint16_t)0x0001) //65,450
-    //     packet.cnt++;
-    // else
-    //     packet.cnt = 0;
-    // packet.size = sizeof(Packet); //STX/ETX 포함 크기
-    // if (tick_90hz) {
-    //     tick_90hz = false;
-    //     Serial.write((uint8_t*)&packet, sizeof(packet));
-    // }
-}
