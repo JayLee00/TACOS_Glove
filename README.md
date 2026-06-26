@@ -235,7 +235,10 @@ STX=0xa5, t_us=242484, count=21, vals=[-5, -15, -17, -14, -13, -16, -11, -7, -6,
 
 ---
 
-## 라이선스 · 기여
+## 라이선스
 
-- BMP384 라이브러리: [SparkFun BMP384 Arduino Library](lib/origin/SparkFun_BMP384_Arduino_Library/) (원본 포함)
-- 프로젝트 코드: 연구용 — 상업적 사용 시 별도 문의
+본 프로젝트는 [BSD 3-Clause License](LICENSE) 하에 배포됩니다.
+
+서드파티 라이브러리는 각자의 라이선스를 따릅니다.
+
+- [SparkFun BMP384 Arduino Library](lib/origin/SparkFun_BMP384_Arduino_Library/) — 별도 LICENSE 포함
